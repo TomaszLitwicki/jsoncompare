@@ -1,0 +1,17 @@
+ {
+	 "Characteristic" : [
+		 {
+			 "Name": "some_name_A",
+			 "Value": "Some_value_A"
+		 },
+		 {
+			 "Name": "some_name_B",
+			 "Value": "Some_value_B"
+		 },
+		 {
+			 "Name": "some_name_D",
+			 "Value": "Some_value_DE"
+		 }
+		 
+	]
+}
