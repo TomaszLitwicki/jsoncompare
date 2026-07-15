@@ -30,6 +30,7 @@ else:
     print(f"{RED}Nope! Something is wrong and the files aren't precisely identical.{RESET} \n")
 
 print(f"{UNDERLINE}COMPARE WITH YOUR SEARCHING LIST:{RESET}\n")
+print(f"Your's searching list:\n{SEARCH_LIST}\n")
 ### JSON A ###
 print(f"WHAT EXIST IN JSON {NAME_FILE_1}:")
 for i in a:
@@ -57,7 +58,6 @@ else:
     print(f"{RED}The json's files have a different 'not_founded' keys.{RESET}\n")
 
 ### COMPARE DIFFERENCE ###
-print(f"{UNDERLINE}COMPARE VALUES IN FOUNDED SEARCHED KEYS:{RESET}\n")
 in_a_not_in_b = list(set(founded_a) - set(founded_b))
 print(f"IN {NAME_FILE_1} NOT IN {NAME_FILE_2}: {in_a_not_in_b}")
 in_b_not_in_a = list(set(founded_b) - set(founded_a))
@@ -65,6 +65,7 @@ print(f"IN {NAME_FILE_2} NOT IN {NAME_FILE_1}: {in_b_not_in_a}")
 print()
 
 ### COMPARE THE SAME KEYS ###
+print(f"{UNDERLINE}COMPARE VALUES IN FOUNDED SEARCHED KEYS:{RESET}\n")
 in_a_and_in_b = list(set(founded_a) & set(founded_b))
 print(f"FOUNDED IN {NAME_FILE_1} AND IN {NAME_FILE_2} {in_a_and_in_b}")
 
