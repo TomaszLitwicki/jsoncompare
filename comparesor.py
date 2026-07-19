@@ -41,9 +41,16 @@ founded_b = []
 not_founded_a: list = SEARCH_LIST.copy()
 not_founded_b: list = SEARCH_LIST.copy()
 
-# with open(f'{FOLDER_NAME/NAME_FILE_1}', "r", encoding='utf-8') as a_json:
-a = json.loads((folder / NAME_FILE_1).read_text(encoding='utf-8'))['Characteristic']
-b = json.loads((folder / NAME_FILE_2).read_text(encoding='utf-8'))['Characteristic']
+try:
+    a = json.loads((folder / NAME_FILE_1).read_text(encoding='utf-8'))['Characteristic']
+except (FileNotFoundError, KeyError):
+    print(f'{RED}Problem with file {NAME_FILE_1}{RESET}')
+    exit()
+try:
+    b = json.loads((folder / NAME_FILE_2).read_text(encoding='utf-8'))['Characteristic']
+except (FileNotFoundError, KeyError):
+    print (f'{RED}Problem with file {NAME_FILE_2}{RESET}')
+    exit()
 
 if a == b:
     print(f"{GREEN}Both files are the same :){RESET}")
@@ -100,3 +107,67 @@ for i in in_a_and_in_b:
     else:
         print(f"{RED}NO!!! Not the same :({RESET}")
     print()
+
+### PRINT SUMMARISE ###
+md_content = [
+    "# 📊 RAPORT PORÓWNANIA PLIKÓW JSON",
+    f"### Przypadek testowy: {FOLDER_NAME}",
+    f"### Wyszukiwane klucze:",
+    *[f"+ {i}" for i in SEARCH_LIST],
+    "## LISTA WSPÓLNYCH KLUCZY variant 1",
+    f"{in_a_and_in_b}\n",
+    "### Porównanie wartości szukanych wspólnych kluczy\n",
+    f"| KLUCZ | PLIK {NAME_FILE_1} | PLIK {NAME_FILE_2} | PORÓWNANIE |",
+    "| :--- | :--- | :--- | :--- |",
+]
+
+for i in in_a_and_in_b:
+    value_from_a = [j['Value'] for j in a if j['Name'] == i][0]
+    value_from_b = [j['Value'] for j in b if j['Name'] == i][0]
+    status = "✅ IDENTYCZNE" if value_from_a == value_from_b else "❌ RÓŻNE"
+    md_content.append(f"| {i} | {value_from_a} | {value_from_b} | {status} |")
+
+md_content.extend([
+    "## LISTA WSPÓLNYCH KLUCZY variant 2",
+    *[f"+ {i}" for i in in_a_and_in_b],
+    "",
+    "### Porównanie wartości szukanych wspólnych kluczy",
+    f"| KLUCZ | PORÓWNANIE |",
+    "| :--- | :--- |",
+])
+
+for i in in_a_and_in_b:
+    value_from_a = [j['Value'] for j in a if j['Name'] == i][0]
+    value_from_b = [j['Value'] for j in b if j['Name'] == i][0]
+    status = "✅ IDENTYCZNE" if value_from_a == value_from_b else "❌ RÓŻNE"
+    md_content.append(f"| {i} | {status} |")
+    if value_from_a != value_from_b:
+        differents = True
+
+if differents:
+    md_content.append("### ⚠️ RÓŻNICE W KLUCZACH")
+    for i in in_a_and_in_b:
+        value_from_a = [j['Value'] for j in a if j['Name'] == i][0]
+        value_from_b = [j['Value'] for j in b if j['Name'] == i][0]
+        if value_from_a != value_from_b:
+            md_content.append(
+                f"Wartości w plikach dla klucza: {i}\n"
+                f"+ {NAME_FILE_1}: {value_from_a}\n"
+                f"+ {NAME_FILE_2}: {value_from_b}\n"
+            )
+
+
+if not_founded_a or not_founded_b:
+    md_content.append("## 🚫 LISTA NIEODNALEZIONYCH KLUCZY: ")
+    if not_founded_a:
+        md_content.append(f" w pliku {NAME_FILE_1} nie odnaleziono kluczy:")
+        for i in not_founded_a:
+            md_content.append(f"  * {i}")
+    if not_founded_b:
+        md_content.append(f" w pliku {NAME_FILE_2} nie odnaleziono kluczy:")
+        for i in not_founded_b:
+            md_content.append(f"  * {i}")
+
+
+with open(f'{FOLDER_NAME}/RAPORT.md', 'w', encoding='utf-8') as raport:
+    raport.write("\n".join(md_content))
