@@ -1,27 +1,49 @@
-### TUTAJ UZUPEŁNIASZ NAZWY ###
-SEARCH_LIST: list= ['some_name_A', 'some_name_C', 'some_name_D',]
-NAME_FILE_1 = '1'
-NAME_FILE_2 = '2'
-
-
-
-### RESZTA KODU DZIAŁA ODTĄD SAMA ###
+from pathlib import Path
 import json
 
+### USTAWIENIA FORMATOWANIA KONSOLI ###
 RED = "\033[1;4;31m"
 GREEN = "\033[1;4;32m"
 UNDERLINE = "\033[4m"
 RESET = "\033[0m"
+
+### POBIERANIE PLIKÓW Z KATALOGÓW ###
+print(f'{UNDERLINE}WELCOME TO JSON-FILES COMPARER{RESET}\nPreparing a files...')
+
+try:
+    dane = json.loads(Path('DATA.json').read_text(encoding='utf-8'))
+    FOLDER_NAME = dane['FOLDER_NAME']
+    SEARCH_LIST = dane['SEARCH_LIST']
+except (FileNotFoundError, KeyError):
+    print(f'{RED}Problem with file DATA.json{RESET}')
+    exit()
+
+folder = Path(FOLDER_NAME)
+
+if folder.exists():
+    print (f'{GREEN}LOADED FOLDER CORRECTLY{RESET}')
+else:
+    print (f'{RED}FOLDER {folder} DOESN\'T EXIST{RESET}')
+    exit()
+
+jsons_files = [i.name for i in folder.glob('*.json')]
+if len(jsons_files) == 2:
+    print(f'{GREEN}LOADED 2 JSON FILES CORRECTLY{RESET}')
+    print(jsons_files)
+    NAME_FILE_1 = jsons_files[0]
+    NAME_FILE_2 = jsons_files[1]
+else:
+    print(f'{RED}ERROR WITH LOADING JSON FILES\nPlease, check that in folder are 2 files.{RESET}')
+    exit()
+
 founded_a = []
 founded_b = []
 not_founded_a: list = SEARCH_LIST.copy()
 not_founded_b: list = SEARCH_LIST.copy()
 
-with open(f'{NAME_FILE_1}.json', "r", encoding='utf-8') as a_json:
-    a = json.load(a_json)['Characteristic']
-
-with open(f'{NAME_FILE_2}.json', 'r', encoding='utf-8' ) as b_json:
-    b = json.load(b_json)['Characteristic']
+# with open(f'{FOLDER_NAME/NAME_FILE_1}', "r", encoding='utf-8') as a_json:
+a = json.loads((folder / NAME_FILE_1).read_text(encoding='utf-8'))['Characteristic']
+b = json.loads((folder / NAME_FILE_2).read_text(encoding='utf-8'))['Characteristic']
 
 if a == b:
     print(f"{GREEN}Both files are the same :){RESET}")
