@@ -17,10 +17,10 @@ founded_b = []
 not_founded_a: list = SEARCH_LIST.copy()
 not_founded_b: list = SEARCH_LIST.copy()
 
-with open(f'{NAME_FILE_1}.json') as a_json:
+with open(f'{NAME_FILE_1}.json', "r", encoding='utf-8') as a_json:
     a = json.load(a_json)['Characteristic']
 
-with open(f'{NAME_FILE_2}.json') as b_json:
+with open(f'{NAME_FILE_2}.json', 'r', encoding='utf-8' ) as b_json:
     b = json.load(b_json)['Characteristic']
 
 if a == b:
@@ -67,7 +67,7 @@ print()
 ### COMPARE THE SAME KEYS ###
 print(f"{UNDERLINE}COMPARE VALUES IN FOUNDED SEARCHED KEYS:{RESET}\n")
 in_a_and_in_b = list(set(founded_a) & set(founded_b))
-print(f"FOUNDED IN {NAME_FILE_1} AND IN {NAME_FILE_2} {in_a_and_in_b}")
+print(f"FOUNDED IN {NAME_FILE_1} AND IN {NAME_FILE_2} {in_a_and_in_b}\n")
 
 for i in in_a_and_in_b:
     print(f"For KEY: {i} the value is:")
