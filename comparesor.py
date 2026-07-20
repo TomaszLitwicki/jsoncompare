@@ -142,7 +142,7 @@ if difference:
 
 
 if not_founded_a or not_founded_b:
-    md_content.append("## 🚫 LISTA NIEODNALEZIONYCH KLUCZY: ")
+    md_content.append("### 🚫 LISTA NIEODNALEZIONYCH KLUCZY ")
     if not_founded_a:
         md_content.append(f" w pliku {NAME_FILE_1} nie odnaleziono kluczy:")
         for i in not_founded_a:
