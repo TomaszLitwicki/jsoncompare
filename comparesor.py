@@ -114,37 +114,21 @@ md_content = [
     f"### Przypadek testowy: {FOLDER_NAME}",
     f"### Wyszukiwane klucze:",
     *[f"+ {i}" for i in SEARCH_LIST],
-    "## LISTA WSPÓLNYCH KLUCZY variant 1",
-    f"{in_a_and_in_b}\n",
     "### Porównanie wartości szukanych wspólnych kluczy\n",
-    f"| KLUCZ | PLIK {NAME_FILE_1} | PLIK {NAME_FILE_2} | PORÓWNANIE |",
+    f"| 🎭 | KLUCZ | PLIK {NAME_FILE_1} | PLIK {NAME_FILE_2} |",
     "| :--- | :--- | :--- | :--- |",
 ]
 
+difference = False
 for i in in_a_and_in_b:
     value_from_a = [j['Value'] for j in a if j['Name'] == i][0]
     value_from_b = [j['Value'] for j in b if j['Name'] == i][0]
-    status = "✅ IDENTYCZNE" if value_from_a == value_from_b else "❌ RÓŻNE"
-    md_content.append(f"| {i} | {value_from_a} | {value_from_b} | {status} |")
-
-md_content.extend([
-    "## LISTA WSPÓLNYCH KLUCZY variant 2",
-    *[f"+ {i}" for i in in_a_and_in_b],
-    "",
-    "### Porównanie wartości szukanych wspólnych kluczy",
-    f"| KLUCZ | PORÓWNANIE |",
-    "| :--- | :--- |",
-])
-
-for i in in_a_and_in_b:
-    value_from_a = [j['Value'] for j in a if j['Name'] == i][0]
-    value_from_b = [j['Value'] for j in b if j['Name'] == i][0]
-    status = "✅ IDENTYCZNE" if value_from_a == value_from_b else "❌ RÓŻNE"
-    md_content.append(f"| {i} | {status} |")
+    status = "✅" if value_from_a == value_from_b else "❌"
+    md_content.append(f"| {status} | {i} | {value_from_a} | {value_from_b} |")
     if value_from_a != value_from_b:
-        differents = True
+        difference = True
 
-if differents:
+if difference:
     md_content.append("### ⚠️ RÓŻNICE W KLUCZACH")
     for i in in_a_and_in_b:
         value_from_a = [j['Value'] for j in a if j['Name'] == i][0]
